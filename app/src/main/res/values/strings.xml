@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Travol</string>
+    <string name="tab_text_1">RECENT</string>
+    <string name="tab_text_2">HOLIDAYS</string>
+    <string name="tab_text_3">VISITED PLACES</string>
+    <string name="tab_text_4">WORLD MAP</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+</resources>
