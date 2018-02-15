@@ -1,8 +1,8 @@
-package lbevan.github.io.travol;
+package lbevan.github.io.travol.activity.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,7 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import lbevan.github.io.travol.section.holiday.HolidaysFragment;
+import lbevan.github.io.travol.R;
+import lbevan.github.io.travol.activity.holiday.EditHolidayActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -60,8 +61,9 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(view.getContext(), EditHolidayActivity.class);
+
+                view.getContext().startActivity(intent);
             }
         });
     }

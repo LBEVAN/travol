@@ -1,12 +1,14 @@
-package lbevan.github.io.travol.section.holiday;
+package lbevan.github.io.travol.activity.main;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import lbevan.github.io.travol.activity.holiday.HolidayActivity;
 import lbevan.github.io.travol.R;
+import lbevan.github.io.travol.domain.Holiday;
 
 /**
  * Created by Luke on 06/12/2017.
@@ -25,6 +27,9 @@ public class HolidaysViewHolder extends RecyclerView.ViewHolder implements View.
 
     @Override
     public void onClick(View view) {
-        Toast.makeText(view.getContext(), "Clicked Country Position = " + getPosition(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(view.getContext(), HolidayActivity.class);
+
+        intent.putExtra("holiday", new Holiday(countryName.getText().toString(), R.drawable.newyork));
+        view.getContext().startActivity(intent);
     }
 }

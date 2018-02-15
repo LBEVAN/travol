@@ -1,4 +1,4 @@
-package lbevan.github.io.travol.section.holiday;
+package lbevan.github.io.travol.activity.main;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

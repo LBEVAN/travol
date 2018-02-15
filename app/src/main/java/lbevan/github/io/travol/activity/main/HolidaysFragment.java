@@ -1,4 +1,4 @@
-package lbevan.github.io.travol.section.holiday;
+package lbevan.github.io.travol.activity.main;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

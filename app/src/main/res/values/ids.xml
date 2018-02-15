@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="activity_holiday" type="id">activity_holiday</item>
+    <item name="fragment_edit_holiday" type="id">fragment_edit_holiday</item>
+    <item name="text_title" type="id">text_title</item>
+    <item name="text_start_date" type="id">text_start_date</item>
+    <item name="text_end_date" type="id">text_end_date</item>
+    <item name="layout_start_date" type="id" />
+</resources>
