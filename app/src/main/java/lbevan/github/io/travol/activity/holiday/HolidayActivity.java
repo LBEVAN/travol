@@ -8,24 +8,28 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import lbevan.github.io.travol.R;
-import lbevan.github.io.travol.domain.Holiday;
+import lbevan.github.io.travol.domain.entity.Holiday;
 
 public class HolidayActivity extends AppCompatActivity {
+
+    private Holiday holiday;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final Holiday holiday = getIntent().getParcelableExtra("holiday");
+        holiday = getIntent().getParcelableExtra("holiday");
 
         setContentView(R.layout.activity_holiday);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        setTitle(holiday.getName());
+
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

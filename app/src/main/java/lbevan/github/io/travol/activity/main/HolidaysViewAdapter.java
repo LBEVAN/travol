@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import lbevan.github.io.travol.R;
-import lbevan.github.io.travol.domain.Holiday;
+import lbevan.github.io.travol.domain.entity.Holiday;
 
 /**
  * Created by Luke on 06/12/2017.
@@ -33,8 +33,10 @@ public class HolidaysViewAdapter extends RecyclerView.Adapter<HolidaysViewHolder
 
     @Override
     public void onBindViewHolder(HolidaysViewHolder holder, int position) {
-        holder.countryName.setText(itemList.get(position).getName());
-        holder.countryPhoto.setImageResource(itemList.get(position).getPhoto());
+        Holiday holiday = itemList.get(position);
+        holder.holiday = holiday;
+        holder.countryName.setText(holiday.getName());
+        holder.countryPhoto.setImageResource(holiday.getPhoto());
     }
 
     @Override

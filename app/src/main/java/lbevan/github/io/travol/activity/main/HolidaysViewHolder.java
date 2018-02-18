@@ -6,14 +6,16 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import lbevan.github.io.travol.activity.holiday.HolidayActivity;
 import lbevan.github.io.travol.R;
-import lbevan.github.io.travol.domain.Holiday;
+import lbevan.github.io.travol.activity.holiday.HolidayActivity;
+import lbevan.github.io.travol.domain.entity.Holiday;
 
 /**
  * Created by Luke on 06/12/2017.
  */
 public class HolidaysViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+    public Holiday holiday;
 
     public TextView countryName;
     public ImageView countryPhoto;
@@ -29,7 +31,7 @@ public class HolidaysViewHolder extends RecyclerView.ViewHolder implements View.
     public void onClick(View view) {
         Intent intent = new Intent(view.getContext(), HolidayActivity.class);
 
-        intent.putExtra("holiday", new Holiday(countryName.getText().toString(), R.drawable.newyork));
+        intent.putExtra("holiday", holiday);
         view.getContext().startActivity(intent);
     }
 }

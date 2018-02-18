@@ -21,12 +21,11 @@
         </activity>
         <activity
             android:name=".activity.holiday.HolidayActivity"
-            android:label="@string/title_activity_holiday"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.holiday.EditHolidayActivity"
             android:label="@string/title_activity_edit_holiday"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

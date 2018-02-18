@@ -48,10 +48,10 @@
 
         <Button
             android:id="@+id/btn_clear_start_date"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_alignParentEnd="true"
-            android:background="@android:drawable/btn_dialog"
+            android:background="@drawable/ic_clear_black_18dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -85,10 +85,10 @@
 
         <Button
             android:id="@+id/btn_clear_end_date"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_alignParentEnd="true"
-            android:background="@android:drawable/btn_dialog"
+            android:background="@drawable/ic_clear_black_18dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -104,6 +104,8 @@
         android:inputType="text|textMultiLine"
         android:gravity="top"
         android:scrollbars="vertical"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
