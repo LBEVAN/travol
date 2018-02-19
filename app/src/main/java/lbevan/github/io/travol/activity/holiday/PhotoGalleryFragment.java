@@ -40,7 +40,7 @@ import static android.app.Activity.RESULT_OK;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link PhotoGalleryFragment.OnFragmentInteractionListener} interface
+ * {@link PhotoGalleryFragment.PhotoGalleryInteractionListener} interface
  * to handle interaction events.
  * Use the {@link PhotoGalleryFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -50,7 +50,7 @@ public class PhotoGalleryFragment extends Fragment {
     private static final int REQUEST_TAKE_PHOTO = 1;
     private static final int REQUEST_CHOOSE_PHOTO = 2;
 
-    private OnFragmentInteractionListener mListener;
+    private PhotoGalleryInteractionListener photoGalleryInteractionListener;
 
     private List<Photo> photos;
 
@@ -127,25 +127,23 @@ public class PhotoGalleryFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof PhotoGalleryInteractionListener) {
+            photoGalleryInteractionListener = (PhotoGalleryInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnAddPhotoToGalleryListener");
         }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        photoGalleryInteractionListener = null;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        // todo: tie to holiday, if generic component, shouldnt the parent do this?
-        photos = Database.getDatabase(getContext()).photoDao().getPhotosByHolidayId(1);
         bindGridView();
     }
 
@@ -158,26 +156,21 @@ public class PhotoGalleryFragment extends Fragment {
                     int currentItem = 0;
                     while(currentItem < count) {
                         Uri imageUri = data.getClipData().getItemAt(currentItem).getUri();
-
                         File imageFile = copyPhotoFromUri(imageUri);
-
-                        // TODO: assign to correct holiday
-                        Photo photo = new Photo(1, imageFile.getName());
-                        Database.getDatabase(getContext()).photoDao().createPhoto(photo);
-
+                        photoGalleryInteractionListener.onAddPhotoToGallery(imageFile);
                         currentItem = currentItem + 1;
                     }
                 } else if(data.getData() != null) {
                     Uri imageUri = data.getData();
-
                     File imageFile = copyPhotoFromUri(imageUri);
-
-                    // TODO: assign to correct holiday
-                    Photo photo = new Photo(1, imageFile.getName());
-                    Database.getDatabase(getContext()).photoDao().createPhoto(photo);
+                    photoGalleryInteractionListener.onAddPhotoToGallery(imageFile);
                 }
+            } else if(requestCode == REQUEST_TAKE_PHOTO) {
+                File imageFile = new File(currentPhotoPath);
+                photoGalleryInteractionListener.onAddPhotoToGallery(imageFile);
             }
         }
+
         if(resultCode == RESULT_CANCELED) {
             if(requestCode == REQUEST_TAKE_PHOTO) {
                 // request photo action cancelled, so delete temp file
@@ -305,18 +298,22 @@ public class PhotoGalleryFragment extends Fragment {
         photosGrid.setAdapter(new PhotoAdapter(getContext(), Arrays.asList(photoFiles)));
     }
 
+    public void updateGallery(List<Photo> photos) {
+        this.photos = photos;
+        bindGridView();
+    }
 
     /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
+     * Interface defining callback operations to be
+     * handled when interacting with the photo gallery.
      */
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
+    public interface PhotoGalleryInteractionListener {
+
+        /**
+         * Callback method for when adding a photo to the gallery.
+         *
+         * @param photoFile the file of the photo added on the filesystem
+         */
+        void onAddPhotoToGallery(File photoFile);
     }
 }

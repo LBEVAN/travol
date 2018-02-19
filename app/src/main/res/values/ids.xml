@@ -6,4 +6,5 @@
     <item name="text_start_date" type="id">text_start_date</item>
     <item name="text_end_date" type="id">text_end_date</item>
     <item name="layout_start_date" type="id" />
+    <item name="fragment_photo_gallery" type="id">fragment_photo_gallery</item>
 </resources>

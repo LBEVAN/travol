@@ -13,29 +13,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import java.io.File;
+import java.util.List;
+
 import lbevan.github.io.travol.R;
 import lbevan.github.io.travol.activity.main.MainActivity;
 import lbevan.github.io.travol.domain.entity.Holiday;
+import lbevan.github.io.travol.domain.entity.Photo;
 import lbevan.github.io.travol.domain.persistence.Database;
 
-public class HolidayActivity extends AppCompatActivity implements PhotoGalleryFragment.OnFragmentInteractionListener, HolidayDetailsFragment.OnFragmentInteractionListener {
+public class HolidayActivity extends AppCompatActivity implements PhotoGalleryFragment.PhotoGalleryInteractionListener, HolidayDetailsFragment.OnFragmentInteractionListener {
 
     private Holiday holiday;
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
+    private SectionsPagerAdapter sectionsPagerAdapter;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,17 +46,16 @@ public class HolidayActivity extends AppCompatActivity implements PhotoGalleryFr
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        viewPager = findViewById(R.id.container);
+        viewPager.setAdapter(sectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = findViewById(R.id.tabs);
 
-        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
-
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -85,9 +76,7 @@ public class HolidayActivity extends AppCompatActivity implements PhotoGalleryFr
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
+    public void onFragmentInteraction(Uri uri) { }
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -117,5 +106,20 @@ public class HolidayActivity extends AppCompatActivity implements PhotoGalleryFr
         public int getCount() {
             return 3;
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onAddPhotoToGallery(File imageFile) {
+        // create the photo and save it to the selected holiday
+        Photo photo = new Photo(holiday.getId(), imageFile.getName());
+        Database.getDatabase(getApplicationContext()).photoDao().createPhoto(photo);
+
+        // reload the photos and update the gallery
+        List<Photo> photos = Database.getDatabase(getApplicationContext()).photoDao().getPhotosByHolidayId(holiday.getId());
+        PhotoGalleryFragment photoGalleryFragment = (PhotoGalleryFragment) getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.container + ":" + viewPager.getCurrentItem());
+        photoGalleryFragment.updateGallery(photos);
     }
 }
