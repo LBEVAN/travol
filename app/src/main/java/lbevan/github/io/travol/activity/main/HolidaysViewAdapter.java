@@ -16,8 +16,8 @@ import lbevan.github.io.travol.domain.entity.Holiday;
  */
 public class HolidaysViewAdapter extends RecyclerView.Adapter<HolidaysViewHolder> {
 
-    private List<Holiday> itemList;
     private Context context;
+    private List<Holiday> itemList;
 
     public HolidaysViewAdapter(Context context, List<Holiday> itemList) {
         this.itemList = itemList;
@@ -36,7 +36,14 @@ public class HolidaysViewAdapter extends RecyclerView.Adapter<HolidaysViewHolder
         Holiday holiday = itemList.get(position);
         holder.holiday = holiday;
         holder.countryName.setText(holiday.getName());
-        holder.countryPhoto.setImageResource(holiday.getPhoto());
+
+        // todo: choose a photo from the list
+        holder.countryPhoto.setImageResource(R.drawable.newyork);
+//        if(holiday.getPhotos() != null && holiday.getPhotos().size() > 0) {
+//            holder.countryPhoto.setImageResource(holiday.getPhotos().get(0));
+//        } else {
+//
+//        }
     }
 
     @Override

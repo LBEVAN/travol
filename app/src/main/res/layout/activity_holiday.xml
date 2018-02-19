@@ -38,15 +38,14 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_height="match_parent"
         android:layout_below="@id/app_bar"
+        android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:layout_height="wrap_content">
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/tabs"
@@ -73,19 +72,15 @@
                     android:text="@string/tab_text_photos" />
 
             </android.support.design.widget.TabLayout>
-
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/content_layout"
+        <android.support.v4.view.ViewPager
+            android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/tabs"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <include layout="@layout/content_holiday" />
-
-        </LinearLayout>
+            android:layout_margin="@dimen/app_margin"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton

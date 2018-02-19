@@ -18,25 +18,30 @@ public class Holiday implements Parcelable {
 
     private String name;
     private Date startDate;
-
     private Date endDate;
     private String notes;
-    private int photo;
+
+    // note: relations don't work on entity objects, then need to be pojo's, so for now just using explicit queries!
+//    @Relation(parentColumn = "id", entityColumn = "holidayId")
+//    private List<Photo> photos;
+
+    public Holiday(){ }
 
     public Holiday(Holiday holiday) {
         this.id = holiday.getId();
         this.name = holiday.getName();
         this.startDate = holiday.startDate;
         this.endDate = holiday.endDate;
-        this.photo = holiday.getPhoto();
+        this.notes = holiday.getNotes();
+//        this.photos = holiday.getPhotos();
     }
 
-    public Holiday(String name, Date startDate, Date endDate, String notes, int photo) {
+    public Holiday(String name, Date startDate, Date endDate, String notes/*, List<Photo> photos*/) {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
         this.notes = notes;
-        this.photo = photo;
+//        this.photos = photos;
     }
 
     protected Holiday(Parcel in) {
@@ -45,7 +50,7 @@ public class Holiday implements Parcelable {
         startDate = (Date) in.readValue(Date.class.getClassLoader());
         endDate = (Date) in.readValue(Date.class.getClassLoader());
         notes = in.readString();
-        photo = in.readInt();
+//        photos = (List<Photo>) in.readValue(List.class.getClassLoader());
     }
 
     @Override
@@ -55,7 +60,7 @@ public class Holiday implements Parcelable {
         dest.writeValue(startDate);
         dest.writeValue(endDate);
         dest.writeString(notes);
-        dest.writeInt(photo);
+//        dest.writeValue(photos);
     }
 
     @Override
@@ -115,11 +120,11 @@ public class Holiday implements Parcelable {
         this.notes = notes;
     }
 
-    public int getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(int photo) {
-        this.photo = photo;
-    }
+//    public List<Photo> getPhotos() {
+//        return photos;
+//    }
+//
+//    public void setPhotos(List<Photo> photos) {
+//        this.photos = photos;
+//    }
 }

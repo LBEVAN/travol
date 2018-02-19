@@ -108,4 +108,6 @@
     <string name="tab_text_details">DETAILS</string>
     <string name="tab_text_places">PLACES</string>
     <string name="tab_text_photos">PHOTOS</string>
+    <string name="text_take_photo">Take Photo</string>
+    <string name="text_choose_photo">Add From Gallery</string>
 </resources>

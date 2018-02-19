@@ -155,7 +155,7 @@ public class EditHolidayActivity extends AppCompatActivity implements DatePicker
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.UK);
             Holiday holiday = null;
             try {
-                holiday = new Holiday(title.getText().toString(), simpleDateFormat.parse(startDate.getText().toString()), simpleDateFormat.parse(endDate.getText().toString()), notes.getText().toString(), R.drawable.newyork);
+                holiday = new Holiday(title.getText().toString(), simpleDateFormat.parse(startDate.getText().toString()), simpleDateFormat.parse(endDate.getText().toString()), notes.getText().toString());
             } catch(ParseException pe) {
                 System.out.println("ParseException");
             }
