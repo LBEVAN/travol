@@ -1,4 +1,4 @@
-package lbevan.github.io.travol.activity.holiday;
+package lbevan.github.io.travol.component.photoGallery;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,30 +9,28 @@ import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.GridView;
-
-import org.apache.commons.collections4.ListUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import lbevan.github.io.travol.R;
 import lbevan.github.io.travol.domain.entity.Photo;
-import lbevan.github.io.travol.domain.persistence.Database;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -52,12 +50,9 @@ public class PhotoGalleryFragment extends Fragment {
 
     private PhotoGalleryInteractionListener photoGalleryInteractionListener;
 
+    private RecyclerView recyclerView;
+
     private List<Photo> photos;
-
-    private Button takePhotoButton;
-    private Button choosePhotoButton;
-    private GridView photosGrid;
-
     private String currentPhotoPath;
 
     public PhotoGalleryFragment() {
@@ -88,41 +83,45 @@ public class PhotoGalleryFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_photo_gallery_actions, menu);
+
+        MenuItem takePhotoItem = menu.findItem(R.id.btn_take_photo);
+        takePhotoItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                dispatchTakePhotoIntent();
+                return true;
+            }
+        });
+
+        MenuItem choosePhotoItem = menu.findItem(R.id.btn_choose_photo);
+        choosePhotoItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                dispatchChoosePhotoIntent();
+                return true;
+            }
+        });
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_photo_gallery, container, false);
+        setHasOptionsMenu(true);
 
-        // bind the take photo button
-        takePhotoButton = view.findViewById(R.id.btn_take_photo);
-        takePhotoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dispatchTakePhotoIntent();
-            }
-        });
-
-        // bind the choose photo button
-        choosePhotoButton = view.findViewById(R.id.btn_choose_photo);
-        choosePhotoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dispatchChoosePhotoIntent();
-            }
-        });
-
-        photosGrid = view.findViewById(R.id.grid_photos);
-        bindGridView();
+        recyclerView = view.findViewById(R.id.recycler_view);
+        bindRecyclerView();
 
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
+    private void bindRecyclerView() {
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        recyclerView.setAdapter(new PhotoGalleryAdapter(getContext(), photos));
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -144,7 +143,7 @@ public class PhotoGalleryFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        bindGridView();
+        bindRecyclerView();
     }
 
     @Override
@@ -274,33 +273,9 @@ public class PhotoGalleryFragment extends Fragment {
 //        getActivity().sendBroadcast(mediaScanIntent);
 //    }
 
-    private void bindGridView() {
-        if(photos == null || photos.size() <= 0) {
-            photosGrid.setAdapter(new PhotoAdapter(getContext(), new ArrayList<File>()));
-            return;
-        }
-
-        // search all app photos
-        File appPhotosDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-
-        final List<String> validFileNames = new ArrayList<>(photos.size());
-        for (Photo photo : photos) {
-            validFileNames.add(photo.getFileName());
-        }
-
-        File[] photoFiles = appPhotosDir.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File file, String name) {
-                return validFileNames.contains(name);
-            }
-        });
-
-        photosGrid.setAdapter(new PhotoAdapter(getContext(), Arrays.asList(photoFiles)));
-    }
-
     public void updateGallery(List<Photo> photos) {
         this.photos = photos;
-        bindGridView();
+        bindRecyclerView();
     }
 
     /**

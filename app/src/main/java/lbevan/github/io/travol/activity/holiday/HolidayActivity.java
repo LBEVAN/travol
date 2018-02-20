@@ -18,6 +18,7 @@ import java.util.List;
 
 import lbevan.github.io.travol.R;
 import lbevan.github.io.travol.activity.main.MainActivity;
+import lbevan.github.io.travol.component.photoGallery.PhotoGalleryFragment;
 import lbevan.github.io.travol.domain.entity.Holiday;
 import lbevan.github.io.travol.domain.entity.Photo;
 import lbevan.github.io.travol.domain.persistence.Database;

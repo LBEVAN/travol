@@ -1,4 +1,4 @@
-package lbevan.github.io.travol.activity.holiday;
+package lbevan.github.io.travol.component.photoGallery;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -7,8 +7,7 @@ import android.widget.ImageView;
 /**
  * Created by Luke on 18/02/2018.
  */
-
-public class GridViewImageView extends android.support.v7.widget.AppCompatImageView {
+class GridViewImageView extends android.support.v7.widget.AppCompatImageView {
 
     public GridViewImageView(Context context) {
         super(context);

@@ -2,9 +2,12 @@ package lbevan.github.io.travol.domain.entity;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import java.io.File;
 
 
 /**
@@ -24,6 +27,10 @@ public class Photo implements Parcelable {
 
     private int holidayId;
     private String fileName;
+
+    /* This is the corresponding file on the device, should be injected when needed */
+    @Ignore
+    private File file;
 
     public Photo(int holidayId, String fileName) {
         this.holidayId = holidayId;
@@ -82,5 +89,13 @@ public class Photo implements Parcelable {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public File getFile() {
+        return file;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
     }
 }

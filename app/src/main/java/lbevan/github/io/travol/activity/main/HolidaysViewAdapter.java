@@ -14,7 +14,7 @@ import lbevan.github.io.travol.domain.entity.Holiday;
 /**
  * Created by Luke on 06/12/2017.
  */
-public class HolidaysViewAdapter extends RecyclerView.Adapter<HolidaysViewHolder> {
+class HolidaysViewAdapter extends RecyclerView.Adapter<HolidaysViewHolder> {
 
     private Context context;
     private List<Holiday> itemList;
@@ -26,8 +26,8 @@ public class HolidaysViewAdapter extends RecyclerView.Adapter<HolidaysViewHolder
 
     @Override
     public HolidaysViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_holiday, null);
-        HolidaysViewHolder rcv = new HolidaysViewHolder(layoutView);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_holiday, null);
+        HolidaysViewHolder rcv = new HolidaysViewHolder(view);
         return rcv;
     }
 

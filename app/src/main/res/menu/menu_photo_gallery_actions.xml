@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="lbevan.github.io.travol.component.photoGallery.PhotoGalleryFragment">
+
+    <item
+        android:id="@+id/btn_take_photo"
+        android:title="@string/text_take_photo"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_photo_camera_white_24dp"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/btn_choose_photo"
+        android:title="@string/text_choose_photo"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_plus_white_24dp"
+        app:showAsAction="always" />
+</menu>

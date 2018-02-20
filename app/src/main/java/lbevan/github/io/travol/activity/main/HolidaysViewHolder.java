@@ -13,7 +13,7 @@ import lbevan.github.io.travol.domain.entity.Holiday;
 /**
  * Created by Luke on 06/12/2017.
  */
-public class HolidaysViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+class HolidaysViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     public Holiday holiday;
 
