@@ -12,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 
 import java.io.File;
 import java.util.List;
@@ -22,6 +23,8 @@ import lbevan.github.io.travol.component.photoGallery.PhotoGalleryFragment;
 import lbevan.github.io.travol.domain.entity.Holiday;
 import lbevan.github.io.travol.domain.entity.Photo;
 import lbevan.github.io.travol.domain.persistence.Database;
+import lbevan.github.io.travol.util.DecodeBitmapAsyncTask;
+import lbevan.github.io.travol.util.FileSystemUtils;
 
 public class HolidayActivity extends AppCompatActivity implements PhotoGalleryFragment.PhotoGalleryInteractionListener, HolidayDetailsFragment.OnFragmentInteractionListener {
 
@@ -29,6 +32,8 @@ public class HolidayActivity extends AppCompatActivity implements PhotoGalleryFr
 
     private SectionsPagerAdapter sectionsPagerAdapter;
     private ViewPager viewPager;
+
+    private ImageView collapsingImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +48,24 @@ public class HolidayActivity extends AppCompatActivity implements PhotoGalleryFr
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        collapsingImageView = findViewById(R.id.img_collapsing);
+
+        List<Photo> photos = Database.getDatabase(getApplicationContext()).photoDao().getPhotosByHolidayId(holiday.getId());
+
+        if(photos == null || photos.size() == 0) {
+            collapsingImageView.setImageDrawable(getResources().getDrawable(R.drawable.default_holiday_image));
+        } else {
+            final File file = FileSystemUtils.getPhotoFileByFileName(getApplicationContext(), photos.get(0).getFileName());
+            collapsingImageView.post(new Runnable() {
+                @Override
+                public void run() {
+                    new DecodeBitmapAsyncTask(file, collapsingImageView).execute();
+                }
+            });
+        }
+
         setTitle(holiday.getName());
 
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.

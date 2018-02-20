@@ -17,16 +17,17 @@ class HolidaysViewHolder extends RecyclerView.ViewHolder implements View.OnClick
 
     public Holiday holiday;
 
-    public TextView countryName;
-    public ImageView countryPhoto;
+    public TextView holidayTitle;
+    public ImageView holidayHighlightedPhoto;
 
     public HolidaysViewHolder(View itemView) {
         super(itemView);
         itemView.setOnClickListener(this);
-        countryName = (TextView)itemView.findViewById(R.id.country_name);
-        countryPhoto = (ImageView)itemView.findViewById(R.id.country_photo);
+        holidayTitle = itemView.findViewById(R.id.text_holiday_title);
+        holidayHighlightedPhoto = itemView.findViewById(R.id.img_holiday_highlighted_photo);
     }
 
+    // todo figure out if this shpuld be delegated back to the activity?
     @Override
     public void onClick(View view) {
         Intent intent = new Intent(view.getContext(), HolidayActivity.class);
