@@ -16,7 +16,8 @@ public class Holiday implements Parcelable {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
-    private String name;
+    private String title;
+    private String location;
     private Date startDate;
     private Date endDate;
     private String notes;
@@ -29,15 +30,17 @@ public class Holiday implements Parcelable {
 
     public Holiday(Holiday holiday) {
         this.id = holiday.getId();
-        this.name = holiday.getName();
+        this.title = holiday.getTitle();
+        this.location = holiday.getLocation();
         this.startDate = holiday.startDate;
         this.endDate = holiday.endDate;
         this.notes = holiday.getNotes();
 //        this.photos = holiday.getPhotos();
     }
 
-    public Holiday(String name, Date startDate, Date endDate, String notes/*, List<Photo> photos*/) {
-        this.name = name;
+    public Holiday(String title, String location, Date startDate, Date endDate, String notes/*, List<Photo> photos*/) {
+        this.title = title;
+        this.location = location;
         this.startDate = startDate;
         this.endDate = endDate;
         this.notes = notes;
@@ -46,7 +49,8 @@ public class Holiday implements Parcelable {
 
     protected Holiday(Parcel in) {
         id = in.readInt();
-        name = in.readString();
+        title = in.readString();
+        location = in.readString();
         startDate = (Date) in.readValue(Date.class.getClassLoader());
         endDate = (Date) in.readValue(Date.class.getClassLoader());
         notes = in.readString();
@@ -56,7 +60,8 @@ public class Holiday implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
-        dest.writeString(name);
+        dest.writeString(title);
+        dest.writeString(location);
         dest.writeValue(startDate);
         dest.writeValue(endDate);
         dest.writeString(notes);
@@ -88,12 +93,20 @@ public class Holiday implements Parcelable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getLocation() {
+        return this.location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public Date getStartDate() {

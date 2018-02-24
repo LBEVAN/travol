@@ -18,12 +18,14 @@ class HolidaysViewHolder extends RecyclerView.ViewHolder implements View.OnClick
     public Holiday holiday;
 
     public TextView holidayTitle;
+    public TextView holidayLocation;
     public ImageView holidayHighlightedPhoto;
 
     public HolidaysViewHolder(View itemView) {
         super(itemView);
         itemView.setOnClickListener(this);
         holidayTitle = itemView.findViewById(R.id.text_holiday_title);
+        holidayLocation = itemView.findViewById(R.id.text_holiday_location);
         holidayHighlightedPhoto = itemView.findViewById(R.id.img_holiday_highlighted_photo);
     }
 

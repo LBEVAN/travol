@@ -111,4 +111,10 @@
     <string name="text_take_photo">Take Photo</string>
     <string name="text_choose_photo">Add From Gallery</string>
     <string name="holiday_image">Image matching the currently selected holiday</string>
+    <string name="hint_location">Location</string>
+    <string name="error_title">Enter the Holiday Title</string>
+    <string name="error_location">Enter the Holiday Location</string>
+    <string name="error_start_date">Enter the Holiday Start Date</string>
+    <string name="error_end_date">Enter the Holiday End Date</string>
+    <string name="error_notes">Enter traveller notes</string>
 </resources>

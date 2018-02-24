@@ -1,6 +1,7 @@
 package lbevan.github.io.travol.activity.holiday;
 
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -26,29 +27,49 @@ public class EditHolidayActivity extends AppCompatActivity implements DatePicker
     private Holiday holiday;
 
     private EditText title;
+    private TextInputLayout inputLayoutTitle;
+
+    private EditText location;
+    private TextInputLayout inputLayoutLocation;
+
     private EditText startDate;
     private Button startDateClearButton;
+    private TextInputLayout inputLayoutStartDate;
+
     private EditText endDate;
     private Button endDateClearButton;
+    private TextInputLayout inputLayoutEndDate;
+
     private EditText notes;
+    private TextInputLayout inputLayoutNotes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_holiday);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         // bind the view components
         title = findViewById(R.id.text_title);
+        inputLayoutTitle = findViewById(R.id.input_layout_text_title);
+
+        location = findViewById(R.id.text_location);
+        inputLayoutLocation = findViewById(R.id.input_layout_text_location);
+
         startDate = findViewById(R.id.text_start_date);
         startDateClearButton = findViewById(R.id.btn_clear_start_date);
+        inputLayoutStartDate = findViewById(R.id.input_layout_text_start_date);
+
         endDate = findViewById(R.id.text_end_date);
         endDateClearButton = findViewById(R.id.btn_clear_end_date);
+        inputLayoutEndDate = findViewById(R.id.input_layout_text_end_date);
+
         notes = findViewById(R.id.text_notes);
+        inputLayoutNotes = findViewById(R.id.input_layout_text_notes);
 
         // if the holiday is passed in, we are editing
         holiday = getIntent().getParcelableExtra("holiday");
@@ -56,10 +77,6 @@ public class EditHolidayActivity extends AppCompatActivity implements DatePicker
             setExistingFieldValues();
         }
 
-        // set hints for fields
-        title.setHint(R.string.hint_title);
-
-        startDate.setHint(R.string.hint_start_date);
         final int startDateFieldId = startDate.getId();
         startDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,7 +92,6 @@ public class EditHolidayActivity extends AppCompatActivity implements DatePicker
             }
         });
 
-        endDate.setHint(R.string.hint_end_date);
         final int endDateFieldId = endDate.getId();
         endDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,8 +106,6 @@ public class EditHolidayActivity extends AppCompatActivity implements DatePicker
                 endDate.setText("");
             }
         });
-
-        notes.setHint(R.string.hint_notes);
     }
 
     @Override
@@ -123,7 +137,7 @@ public class EditHolidayActivity extends AppCompatActivity implements DatePicker
     }
 
     private void setExistingFieldValues() {
-        title.setText(holiday.getName());
+        title.setText(holiday.getTitle());
 
         if(holiday.getStartDate() != null) {
             startDate.setText(holiday.getStartDate().toString());
@@ -151,18 +165,50 @@ public class EditHolidayActivity extends AppCompatActivity implements DatePicker
         int id = item.getItemId();
 
         if (id == R.id.btn_save) {
-            System.out.println("saving!");
+            save();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void save() {
+        boolean isValid = true;
+
+        final String titleText = title.getText().toString().trim();
+        if(null == titleText || titleText.length() == 0) {
+            inputLayoutTitle.setError(getString(R.string.error_title));
+            isValid = false;
+        }
+
+        final String locationText = location.getText().toString().trim();
+        if(null == locationText || locationText.length() == 0) {
+            inputLayoutLocation.setError(getString(R.string.error_location));
+            isValid = false;
+        }
+
+        final String startDateText = startDate.getText().toString().trim();
+        if(null == startDateText || startDateText.length() == 0) {
+            inputLayoutStartDate.setError(getString(R.string.error_start_date));
+            isValid = false;
+        }
+
+        final String endDateText = endDate.getText().toString().trim();
+        if(null == endDateText || endDateText.length() == 0) {
+            inputLayoutEndDate.setError(getString(R.string.error_end_date));
+            isValid = false;
+        }
+
+        if(isValid) {
+            // valid, so save
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.UK);
             Holiday holiday = null;
             try {
-                holiday = new Holiday(title.getText().toString(), simpleDateFormat.parse(startDate.getText().toString()), simpleDateFormat.parse(endDate.getText().toString()), notes.getText().toString());
+                holiday = new Holiday(title.getText().toString(), location.getText().toString(), simpleDateFormat.parse(startDate.getText().toString()), simpleDateFormat.parse(endDate.getText().toString()), notes.getText().toString());
             } catch(ParseException pe) {
                 System.out.println("ParseException");
             }
             Database.getDatabase(getApplicationContext()).holidayDao().createHoliday(holiday);
             finish();
         }
-
-        return super.onOptionsItemSelected(item);
     }
 }

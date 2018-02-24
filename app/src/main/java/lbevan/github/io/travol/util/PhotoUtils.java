@@ -22,7 +22,8 @@ public class PhotoUtils {
      * @param targetHeight height of the target image holder (i.e. {@link android.widget.ImageView})
      * @return the decoded and scaled {@link Bitmap}
      */
-    public static Bitmap decodeSampledBitmapFromFile(File file, int targetWidth, int targetHeight) {
+    public static Bitmap
+    decodeSampledBitmapFromFile(File file, int targetWidth, int targetHeight) {
         // first decode with inJustDecodeBounds = true to check dimensions
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;

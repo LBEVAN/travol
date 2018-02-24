@@ -1,4 +1,4 @@
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -6,9 +6,95 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="lbevan.github.io.travol.activity.holiday.HolidayDetailsFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/large_text" />
+        android:nestedScrollingEnabled="false">
 
-</android.support.v4.widget.NestedScrollView>
+        <LinearLayout
+            android:id="@+id/layout_text_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/label_text_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/hint_location"
+                style="@style/TravolLabelAppearance"/>
+
+            <TextView
+                android:id="@+id/text_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/error_location"
+                style="@style/TravolTextAppearance"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_dates"
+            android:layout_below="@+id/layout_text_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:baselineAligned="false">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="start"
+                android:layout_weight="0.5">
+
+                <TextView
+                    android:id="@+id/label_text_start_date"
+                    style="@style/TravolLabelAppearance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hint_start_date" />
+
+                <TextView
+                    android:id="@+id/text_start_date"
+                    style="@style/TravolTextAppearance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/error_start_date" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="0.5">
+
+                <TextView
+                    android:id="@+id/label_text_end_date"
+                    style="@style/TravolLabelAppearance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hint_end_date" />
+
+                <TextView
+                    android:id="@+id/text_end_date"
+                    style="@style/TravolTextAppearance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/error_end_date" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/notes_fragment_container"
+            android:layout_below="@+id/layout_dates"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:orientation="vertical"/>
+
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

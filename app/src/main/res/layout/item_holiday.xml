@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/app_margin"
         app:cardBackgroundColor="@android:color/white"
-        app:cardCornerRadius="0dp"
+        app:cardCornerRadius="2dp"
         app:cardPreventCornerOverlap="true"
         app:cardUseCompatPadding="true">
 
@@ -39,7 +39,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:textSize="18sp"
+                    android:textSize="20sp"
+                    android:textColor="@color/colorPrimary"   />
+
+                <TextView
+                    android:id="@+id/text_holiday_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:textSize="16sp"
                     android:textColor="@color/colorAccent"   />
 
             </LinearLayout>

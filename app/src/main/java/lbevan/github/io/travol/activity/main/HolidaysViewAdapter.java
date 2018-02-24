@@ -40,7 +40,8 @@ class HolidaysViewAdapter extends RecyclerView.Adapter<HolidaysViewHolder> {
     public void onBindViewHolder(final HolidaysViewHolder holder, int position) {
         Holiday holiday = itemList.get(position);
         holder.holiday = holiday;
-        holder.holidayTitle.setText(holiday.getName());
+        holder.holidayTitle.setText(holiday.getTitle());
+        holder.holidayLocation.setText(holiday.getLocation());
 
         // todo: choose a photo from the list
         List<Photo> photos = Database.getDatabase(context).photoDao().getPhotosByHolidayId(holiday.getId());

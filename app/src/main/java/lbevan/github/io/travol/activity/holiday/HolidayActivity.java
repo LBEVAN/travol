@@ -19,14 +19,19 @@ import java.util.List;
 
 import lbevan.github.io.travol.R;
 import lbevan.github.io.travol.activity.main.MainActivity;
+import lbevan.github.io.travol.component.notes.NotesFragment;
 import lbevan.github.io.travol.component.photoGallery.PhotoGalleryFragment;
 import lbevan.github.io.travol.domain.entity.Holiday;
+import lbevan.github.io.travol.domain.entity.Note;
 import lbevan.github.io.travol.domain.entity.Photo;
 import lbevan.github.io.travol.domain.persistence.Database;
 import lbevan.github.io.travol.util.DecodeBitmapAsyncTask;
 import lbevan.github.io.travol.util.FileSystemUtils;
 
-public class HolidayActivity extends AppCompatActivity implements PhotoGalleryFragment.PhotoGalleryInteractionListener, HolidayDetailsFragment.OnFragmentInteractionListener {
+public class HolidayActivity extends AppCompatActivity implements
+        PhotoGalleryFragment.PhotoGalleryInteractionListener,
+        HolidayDetailsFragment.OnFragmentInteractionListener,
+        NotesFragment.OnListFragmentInteractionListener {
 
     private Holiday holiday;
 
@@ -64,7 +69,7 @@ public class HolidayActivity extends AppCompatActivity implements PhotoGalleryFr
             });
         }
 
-        setTitle(holiday.getName());
+        setTitle(holiday.getTitle());
 
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
@@ -98,6 +103,11 @@ public class HolidayActivity extends AppCompatActivity implements PhotoGalleryFr
     @Override
     public void onFragmentInteraction(Uri uri) { }
 
+    @Override
+    public void onListFragmentInteraction(Note note) {
+
+    }
+
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -114,7 +124,7 @@ public class HolidayActivity extends AppCompatActivity implements PhotoGalleryFr
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch(position) {
                 case 0:
-                    return HolidayDetailsFragment.newInstance("test1", "test2");
+                    return HolidayDetailsFragment.newInstance(holiday);
                 case 2:
                     return PhotoGalleryFragment.newInstance(Database.getDatabase(getApplicationContext()).photoDao().getPhotosByHolidayId(holiday.getId()));
                 default:

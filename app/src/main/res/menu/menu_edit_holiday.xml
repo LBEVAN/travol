@@ -6,6 +6,6 @@
         android:id="@+id/btn_save"
         android:title="@string/btn_save_title"
         android:orderInCategory="100"
-        android:icon="@drawable/ic_save_white_18dp"
+        android:icon="@drawable/ic_done_white_24dp"
         app:showAsAction="always" />
 </menu>
