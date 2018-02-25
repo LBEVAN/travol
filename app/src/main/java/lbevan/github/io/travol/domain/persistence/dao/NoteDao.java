@@ -17,7 +17,7 @@ import lbevan.github.io.travol.domain.entity.Note;
 public interface NoteDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void createNote(Note note);
+    Long saveNote(Note note);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void updateNote(Note note);

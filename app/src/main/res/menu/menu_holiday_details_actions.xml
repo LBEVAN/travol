@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="lbevan.github.io.travol.activity.holiday.HolidayDetailsFragment">
+
+    <item
+        android:id="@+id/btn_create_note"
+        android:title="@string/text_add_note"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_note_add_white_24dp"
+        app:showAsAction="always" />
+</menu>

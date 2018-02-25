@@ -19,8 +19,8 @@ import java.util.Locale;
 
 import lbevan.github.io.travol.R;
 import lbevan.github.io.travol.component.datePicker.DatePickerFragment;
-import lbevan.github.io.travol.domain.persistence.Database;
 import lbevan.github.io.travol.domain.entity.Holiday;
+import lbevan.github.io.travol.domain.persistence.Database;
 
 public class EditHolidayActivity extends AppCompatActivity implements DatePickerFragment.OnDateSetListener {
 
@@ -39,9 +39,6 @@ public class EditHolidayActivity extends AppCompatActivity implements DatePicker
     private EditText endDate;
     private Button endDateClearButton;
     private TextInputLayout inputLayoutEndDate;
-
-    private EditText notes;
-    private TextInputLayout inputLayoutNotes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,13 +65,17 @@ public class EditHolidayActivity extends AppCompatActivity implements DatePicker
         endDateClearButton = findViewById(R.id.btn_clear_end_date);
         inputLayoutEndDate = findViewById(R.id.input_layout_text_end_date);
 
-        notes = findViewById(R.id.text_notes);
-        inputLayoutNotes = findViewById(R.id.input_layout_text_notes);
-
         // if the holiday is passed in, we are editing
         holiday = getIntent().getParcelableExtra("holiday");
         if(null != holiday) {
+            // set the title to editing
+            this.setTitle(R.string.title_activity_edit_holiday);
+
+            // set the values to edit
             setExistingFieldValues();
+        } else {
+            // set the title to creating
+            this.setTitle(R.string.title_activity_create_holiday);
         }
 
         final int startDateFieldId = startDate.getId();
@@ -139,6 +140,8 @@ public class EditHolidayActivity extends AppCompatActivity implements DatePicker
     private void setExistingFieldValues() {
         title.setText(holiday.getTitle());
 
+        location.setText(holiday.getLocation());
+
         if(holiday.getStartDate() != null) {
             startDate.setText(holiday.getStartDate().toString());
         }
@@ -146,8 +149,6 @@ public class EditHolidayActivity extends AppCompatActivity implements DatePicker
         if(holiday.getEndDate() != null) {
             endDate.setText(holiday.getEndDate().toString());
         }
-
-        notes.setText(holiday.getNotes());
     }
 
     @Override
@@ -199,11 +200,11 @@ public class EditHolidayActivity extends AppCompatActivity implements DatePicker
         }
 
         if(isValid) {
-            // valid, so save
+            // valid, so save to db
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.UK);
             Holiday holiday = null;
             try {
-                holiday = new Holiday(title.getText().toString(), location.getText().toString(), simpleDateFormat.parse(startDate.getText().toString()), simpleDateFormat.parse(endDate.getText().toString()), notes.getText().toString());
+                holiday = new Holiday(title.getText().toString(), location.getText().toString(), simpleDateFormat.parse(startDate.getText().toString()), simpleDateFormat.parse(endDate.getText().toString()));
             } catch(ParseException pe) {
                 System.out.println("ParseException");
             }

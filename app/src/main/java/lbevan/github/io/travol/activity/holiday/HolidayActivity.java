@@ -31,7 +31,7 @@ import lbevan.github.io.travol.util.FileSystemUtils;
 public class HolidayActivity extends AppCompatActivity implements
         PhotoGalleryFragment.PhotoGalleryInteractionListener,
         HolidayDetailsFragment.OnFragmentInteractionListener,
-        NotesFragment.OnListFragmentInteractionListener {
+        NotesFragment.OnFragmentInteractionListener{
 
     private Holiday holiday;
 
@@ -103,11 +103,6 @@ public class HolidayActivity extends AppCompatActivity implements
     @Override
     public void onFragmentInteraction(Uri uri) { }
 
-    @Override
-    public void onListFragmentInteraction(Note note) {
-
-    }
-
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -151,5 +146,28 @@ public class HolidayActivity extends AppCompatActivity implements
         List<Photo> photos = Database.getDatabase(getApplicationContext()).photoDao().getPhotosByHolidayId(holiday.getId());
         PhotoGalleryFragment photoGalleryFragment = (PhotoGalleryFragment) getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.container + ":" + viewPager.getCurrentItem());
         photoGalleryFragment.updateGallery(photos);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * Save the note.
+     */
+    @Override
+    public Note onCreateNoteResult(Note note) {
+        note.setHolidayId(holiday.getId());
+        Long id = Database.getDatabase(this).noteDao().saveNote(note);
+        note.setId(id);
+        return note;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * Save the note.
+     */
+    @Override
+    public void onEditNoteResult(Note note) {
+        Database.getDatabase(this).noteDao().saveNote(note);
     }
 }

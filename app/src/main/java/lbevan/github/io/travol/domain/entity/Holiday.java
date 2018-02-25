@@ -20,7 +20,6 @@ public class Holiday implements Parcelable {
     private String location;
     private Date startDate;
     private Date endDate;
-    private String notes;
 
     // note: relations don't work on entity objects, then need to be pojo's, so for now just using explicit queries!
 //    @Relation(parentColumn = "id", entityColumn = "holidayId")
@@ -34,16 +33,14 @@ public class Holiday implements Parcelable {
         this.location = holiday.getLocation();
         this.startDate = holiday.startDate;
         this.endDate = holiday.endDate;
-        this.notes = holiday.getNotes();
 //        this.photos = holiday.getPhotos();
     }
 
-    public Holiday(String title, String location, Date startDate, Date endDate, String notes/*, List<Photo> photos*/) {
+    public Holiday(String title, String location, Date startDate, Date endDate /*, List<Photo> photos*/) {
         this.title = title;
         this.location = location;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.notes = notes;
 //        this.photos = photos;
     }
 
@@ -53,7 +50,6 @@ public class Holiday implements Parcelable {
         location = in.readString();
         startDate = (Date) in.readValue(Date.class.getClassLoader());
         endDate = (Date) in.readValue(Date.class.getClassLoader());
-        notes = in.readString();
 //        photos = (List<Photo>) in.readValue(List.class.getClassLoader());
     }
 
@@ -64,7 +60,6 @@ public class Holiday implements Parcelable {
         dest.writeString(location);
         dest.writeValue(startDate);
         dest.writeValue(endDate);
-        dest.writeString(notes);
 //        dest.writeValue(photos);
     }
 
@@ -123,14 +118,6 @@ public class Holiday implements Parcelable {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
     }
 
 //    public List<Photo> getPhotos() {

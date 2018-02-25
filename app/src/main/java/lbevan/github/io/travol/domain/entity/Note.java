@@ -11,14 +11,14 @@ import android.os.Parcelable;
  */
 @Entity(foreignKeys = {
         @ForeignKey(
-                entity = Note.class,
+                entity = Holiday.class,
                 parentColumns = ("id"),
                 childColumns = "holidayId")
 })
 public class Note implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
 
     private int holidayId;
 
@@ -31,7 +31,7 @@ public class Note implements Parcelable {
     }
 
     protected Note(Parcel in) {
-        id = in.readInt();
+        id = in.readLong();
         holidayId = in.readInt();
         title = in.readString();
         contents = in.readString();
@@ -56,18 +56,18 @@ public class Note implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
+        dest.writeLong(id);
         dest.writeInt(holidayId);
         dest.writeString(title);
         dest.writeString(contents);
     }
 
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

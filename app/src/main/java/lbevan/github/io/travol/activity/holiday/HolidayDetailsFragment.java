@@ -1,12 +1,16 @@
 package lbevan.github.io.travol.activity.holiday;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -15,9 +19,13 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import lbevan.github.io.travol.R;
+import lbevan.github.io.travol.activity.note.EditNoteActivity;
 import lbevan.github.io.travol.component.notes.NotesFragment;
 import lbevan.github.io.travol.domain.entity.Holiday;
+import lbevan.github.io.travol.domain.entity.Note;
 import lbevan.github.io.travol.domain.persistence.Database;
+
+import static android.app.Activity.RESULT_OK;
 
 /**\xo
  * A simple {@link Fragment} subclass.
@@ -69,6 +77,7 @@ public class HolidayDetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_holiday_details, container, false);
+        setHasOptionsMenu(true);
 
         location = view.findViewById(R.id.text_location);
         location.setText(holiday.getLocation());
@@ -90,12 +99,19 @@ public class HolidayDetailsFragment extends Fragment {
         fragmentTransaction.replace(R.id.notes_fragment_container, notesFragment).commit();
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        inflater.inflate(R.menu.menu_holiday_details_actions, menu);
+//
+//        MenuItem addNoteItem = menu.findItem(R.id.btn_add_note);
+//        addNoteItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem menuItem) {
+//                dispatchAddNoteIntent();
+//                return true;
+//            }
+//        });
+//    }
 
     @Override
     public void onAttach(Context context) {
@@ -128,4 +144,5 @@ public class HolidayDetailsFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }
