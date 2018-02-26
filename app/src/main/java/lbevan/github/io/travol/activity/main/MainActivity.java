@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import lbevan.github.io.travol.R;
 import lbevan.github.io.travol.activity.holiday.EditHolidayActivity;
+import lbevan.github.io.travol.component.place.PlacesFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -61,9 +62,15 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), EditHolidayActivity.class);
+                int position = mViewPager.getCurrentItem();
 
-                view.getContext().startActivity(intent);
+                if(position == 1) {
+                    Intent intent = new Intent(view.getContext(), EditHolidayActivity.class);
+                    view.getContext().startActivity(intent);
+                } else if(position == 2) {
+                    Intent intent = new Intent(view.getContext(), EditHolidayActivity.class);
+                    view.getContext().startActivity(intent);
+                }
             }
         });
     }
@@ -143,6 +150,8 @@ public class MainActivity extends AppCompatActivity {
 
             if(position == 1) {
                 return new HolidaysFragment();
+            } else if(position == 2) {
+                return new PlacesFragment();
             }
             return PlaceholderFragment.newInstance(position + 1);
         }

@@ -1,4 +1,4 @@
-package lbevan.github.io.travol.activity.main;
+package lbevan.github.io.travol.component.place;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,17 +16,11 @@ import lbevan.github.io.travol.activity.holiday.EditHolidayActivity;
 import lbevan.github.io.travol.domain.persistence.Database;
 
 /**
- * Created by Luke on 06/12/2017.
+ * Created by Luke on 25/02/2018.
  */
-public class HolidaysFragment extends Fragment {
+public class PlacesFragment extends Fragment {
 
     private RecyclerView recyclerView;
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        bindRecyclerView();
-    }
 
     @Nullable
     @Override
@@ -39,8 +33,14 @@ public class HolidaysFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        bindRecyclerView();
+    }
+
     private void bindRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new HolidaysViewAdapter(getContext(), Database.getDatabase(getContext()).holidayDao().getHolidays()));
+        recyclerView.setAdapter(new PlacesViewAdapter(getContext(), Database.getDatabase(getContext()).placeDao().getPlaces()));
     }
 }
