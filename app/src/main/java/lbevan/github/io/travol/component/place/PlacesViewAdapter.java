@@ -1,6 +1,7 @@
 package lbevan.github.io.travol.component.place;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 import java.util.List;
 
 import lbevan.github.io.travol.R;
+import lbevan.github.io.travol.activity.holiday.HolidayActivity;
+import lbevan.github.io.travol.activity.place.PlaceActivity;
 import lbevan.github.io.travol.domain.entity.Place;
 
 /**
@@ -37,6 +40,7 @@ public class PlacesViewAdapter extends RecyclerView.Adapter<PlacesViewAdapter.Vi
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, int position) {
         Place place = places.get(position);
+        viewHolder.place = place;
         viewHolder.placeTitle.setText(place.getTitle());
         viewHolder.placeLocation.setText(place.getLocation());
 
@@ -65,9 +69,10 @@ public class PlacesViewAdapter extends RecyclerView.Adapter<PlacesViewAdapter.Vi
         return this.places.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private View view;
+        private Place place;
         private TextView placeTitle;
         private TextView placeLocation;
         private ImageView placeHighlightedPhoto;
@@ -75,9 +80,18 @@ public class PlacesViewAdapter extends RecyclerView.Adapter<PlacesViewAdapter.Vi
         public ViewHolder(View view) {
             super(view);
             this.view = view;
+            itemView.setOnClickListener(this);
             placeTitle = itemView.findViewById(R.id.text_place_title);
             placeLocation = itemView.findViewById(R.id.text_place_location);
             placeHighlightedPhoto = itemView.findViewById(R.id.img_place_highlighted_photo);
+        }
+
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(view.getContext(), PlaceActivity.class);
+
+            intent.putExtra("Place", place);
+            view.getContext().startActivity(intent);
         }
     }
 }

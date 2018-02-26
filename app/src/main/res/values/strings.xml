@@ -112,7 +112,8 @@
     <string name="tab_text_photos">PHOTOS</string>
     <string name="text_take_photo">Take Photo</string>
     <string name="text_choose_photo">Add From Gallery</string>
-    <string name="holiday_image">Image matching the currently selected holiday</string>
+    <string name="holiday_image">Image matching the currently selected Holiday</string>
+    <string name="place_image">Image matching the currently selected Place</string>
     <string name="hint_location">Location</string>
     <string name="error_title">Enter the Title</string>
     <string name="error_location">Enter the Location</string>

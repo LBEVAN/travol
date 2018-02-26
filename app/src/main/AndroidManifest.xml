@@ -51,6 +51,8 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".activity.place.EditPlaceActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activity.place.PlaceActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
