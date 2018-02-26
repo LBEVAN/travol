@@ -19,9 +19,14 @@ import android.widget.TextView;
 
 import lbevan.github.io.travol.R;
 import lbevan.github.io.travol.activity.holiday.EditHolidayActivity;
+import lbevan.github.io.travol.activity.place.EditPlaceActivity;
 import lbevan.github.io.travol.component.place.PlacesFragment;
+import lbevan.github.io.travol.domain.entity.Place;
+import lbevan.github.io.travol.domain.persistence.Database;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final int REQUEST_CREATE_PLACE = 2;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -68,13 +73,26 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(view.getContext(), EditHolidayActivity.class);
                     view.getContext().startActivity(intent);
                 } else if(position == 2) {
-                    Intent intent = new Intent(view.getContext(), EditHolidayActivity.class);
-                    view.getContext().startActivity(intent);
+                    Intent intent = new Intent(view.getContext(), EditPlaceActivity.class);
+                    startActivityForResult(intent, REQUEST_CREATE_PLACE);
                 }
             }
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK) {
+            if(requestCode == REQUEST_CREATE_PLACE) {
+                Place place = data.getParcelableExtra("Place");
+                Database.getDatabase(this).placeDao().savePlace(place);
+                mViewPager.getAdapter().notifyDataSetChanged();
+            }
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

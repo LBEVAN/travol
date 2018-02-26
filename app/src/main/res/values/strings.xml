@@ -99,7 +99,7 @@
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_edit_holiday">Edit Holiday</string>
-    <string name="title_activity_create_holiday">Create Holiday</string>
+    <string name="title_activity_create_holiday">Create a Holiday</string>
     <string name="title_activity_edit_note">Edit Note</string>
     <string name="title_activity_create_note">Create Note</string>
     <string name="hint_title">Title</string>
@@ -114,12 +114,16 @@
     <string name="text_choose_photo">Add From Gallery</string>
     <string name="holiday_image">Image matching the currently selected holiday</string>
     <string name="hint_location">Location</string>
-    <string name="error_title">Enter the Holiday Title</string>
-    <string name="error_location">Enter the Holiday Location</string>
-    <string name="error_start_date">Enter the Holiday Start Date</string>
-    <string name="error_end_date">Enter the Holiday End Date</string>
+    <string name="error_title">Enter the Title</string>
+    <string name="error_location">Enter the Location</string>
+    <string name="error_start_date">Enter the Start Date</string>
+    <string name="error_end_date">Enter the End Date</string>
     <string name="error_notes">Enter traveller notes</string>
     <string name="text_add_note">Add Note</string>
     <string name="hint_contents">Note Contents</string>
     <string name="error_contents">Enter the details of the Note</string>
+    <string name="title_activity_edit_Place">Edit Place</string>
+    <string name="title_activity_create_place">Create a Place</string>
+    <string name="error_date">Enter the Date</string>
+    <string name="hint_date">Date</string>
 </resources>
