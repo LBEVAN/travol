@@ -1,5 +1,7 @@
 package lbevan.github.io.travol.activity.holiday;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
@@ -11,7 +13,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -19,10 +23,15 @@ import java.util.Locale;
 
 import lbevan.github.io.travol.R;
 import lbevan.github.io.travol.component.datePicker.DatePickerFragment;
+import lbevan.github.io.travol.domain.entity.HighlightPhoto;
 import lbevan.github.io.travol.domain.entity.Holiday;
 import lbevan.github.io.travol.domain.persistence.Database;
+import lbevan.github.io.travol.util.DecodeBitmapAsyncTask;
+import lbevan.github.io.travol.util.PhotoUtils;
 
 public class EditHolidayActivity extends AppCompatActivity implements DatePickerFragment.OnDateSetListener {
+
+    private static final int REQUEST_SELECT_PHOTO = 1;
 
     private Holiday holiday;
 
@@ -39,6 +48,11 @@ public class EditHolidayActivity extends AppCompatActivity implements DatePicker
     private EditText endDate;
     private Button endDateClearButton;
     private TextInputLayout inputLayoutEndDate;
+
+    private ImageView highlightPhoto;
+    private Button selectHighlightPhotoButton;
+
+    private String highlightPhotoPath = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +78,9 @@ public class EditHolidayActivity extends AppCompatActivity implements DatePicker
         endDate = findViewById(R.id.text_end_date);
         endDateClearButton = findViewById(R.id.btn_clear_end_date);
         inputLayoutEndDate = findViewById(R.id.input_layout_text_end_date);
+
+        highlightPhoto = findViewById(R.id.img_holiday_highlight_photo);
+        selectHighlightPhotoButton = findViewById(R.id.btn_select_highlight_photo);
 
         // if the holiday is passed in, we are editing
         holiday = getIntent().getParcelableExtra("holiday");
@@ -107,6 +124,44 @@ public class EditHolidayActivity extends AppCompatActivity implements DatePicker
                 endDate.setText("");
             }
         });
+
+        selectHighlightPhotoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dispatchSelectPhotoIntent();
+            }
+        });
+    }
+
+    private void dispatchSelectPhotoIntent() {
+        Intent intent = new Intent();
+        // Show only images, no videos or anything else
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        // Always show the chooser (if there are multiple options available)
+        startActivityForResult(Intent.createChooser(intent, "Select Highlight Photo"), REQUEST_SELECT_PHOTO);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK) {
+            if(requestCode == REQUEST_SELECT_PHOTO) {
+                // get the data
+                Uri imageUri = data.getData();
+
+                // store the image for the app
+                highlightPhotoPath = PhotoUtils.copyPhotoFromUri(this, imageUri);
+
+                // update the view to show the image
+                highlightPhoto.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        new DecodeBitmapAsyncTask(highlightPhotoPath, highlightPhoto).execute();
+                    }
+                });
+            }
+        }
     }
 
     @Override
@@ -142,12 +197,23 @@ public class EditHolidayActivity extends AppCompatActivity implements DatePicker
 
         location.setText(holiday.getLocation());
 
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.UK);
+
         if(holiday.getStartDate() != null) {
-            startDate.setText(holiday.getStartDate().toString());
+            startDate.setText(simpleDateFormat.format(holiday.getStartDate()));
         }
 
         if(holiday.getEndDate() != null) {
-            endDate.setText(holiday.getEndDate().toString());
+            endDate.setText(simpleDateFormat.format(holiday.getEndDate()));
+        }
+
+        if(holiday.getHighlightPhoto() != null & !holiday.getHighlightPhoto().getPath().equals("")) {
+            highlightPhoto.post(new Runnable() {
+                @Override
+                public void run() {
+                    new DecodeBitmapAsyncTask(holiday.getHighlightPhoto().getPath(), highlightPhoto).execute();
+                }
+            });
         }
     }
 
@@ -202,13 +268,31 @@ public class EditHolidayActivity extends AppCompatActivity implements DatePicker
         if(isValid) {
             // valid, so save to db
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.UK);
-            Holiday holiday = null;
+
             try {
-                holiday = new Holiday(title.getText().toString(), location.getText().toString(), simpleDateFormat.parse(startDate.getText().toString()), simpleDateFormat.parse(endDate.getText().toString()));
+                if(null != holiday) {
+                    holiday.setTitle(title.getText().toString());
+                    holiday.setLocation(location.getText().toString());
+                    holiday.setStartDate(simpleDateFormat.parse(startDate.getText().toString()));
+                    holiday.setEndDate(simpleDateFormat.parse(endDate.getText().toString()));
+                    holiday.setHighlightPhoto(new HighlightPhoto(highlightPhotoPath));
+                } else {
+                    holiday = new Holiday(title.getText().toString(),
+                            location.getText().toString(),
+                            simpleDateFormat.parse(startDate.getText().toString()),
+                            simpleDateFormat.parse(endDate.getText().toString()),
+                            new HighlightPhoto(highlightPhotoPath));
+                }
             } catch(ParseException pe) {
+                // todo fix exception handling
                 System.out.println("ParseException");
             }
-            Database.getDatabase(getApplicationContext()).holidayDao().createHoliday(holiday);
+
+            // return the holiday
+            Intent data = new Intent();
+            data.putExtra("Holiday", holiday);
+            setResult(RESULT_OK, data);
+
             finish();
         }
     }

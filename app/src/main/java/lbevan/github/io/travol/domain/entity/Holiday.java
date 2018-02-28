@@ -1,5 +1,6 @@
 package lbevan.github.io.travol.domain.entity;
 
+import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
@@ -21,6 +22,9 @@ public class Holiday implements Parcelable {
     private Date startDate;
     private Date endDate;
 
+    @Embedded
+    private HighlightPhoto highlightPhoto;
+
     // note: relations don't work on entity objects, then need to be pojo's, so for now just using explicit queries!
 //    @Relation(parentColumn = "id", entityColumn = "holidayId")
 //    private List<Photo> photos;
@@ -31,17 +35,17 @@ public class Holiday implements Parcelable {
         this.id = holiday.getId();
         this.title = holiday.getTitle();
         this.location = holiday.getLocation();
-        this.startDate = holiday.startDate;
-        this.endDate = holiday.endDate;
-//        this.photos = holiday.getPhotos();
+        this.startDate = holiday.getStartDate();
+        this.endDate = holiday.getEndDate();
+        this.highlightPhoto = holiday.getHighlightPhoto();
     }
 
-    public Holiday(String title, String location, Date startDate, Date endDate /*, List<Photo> photos*/) {
+    public Holiday(String title, String location, Date startDate, Date endDate, HighlightPhoto highlightPhoto) {
         this.title = title;
         this.location = location;
         this.startDate = startDate;
         this.endDate = endDate;
-//        this.photos = photos;
+        this.highlightPhoto = highlightPhoto;
     }
 
     protected Holiday(Parcel in) {
@@ -50,7 +54,7 @@ public class Holiday implements Parcelable {
         location = in.readString();
         startDate = (Date) in.readValue(Date.class.getClassLoader());
         endDate = (Date) in.readValue(Date.class.getClassLoader());
-//        photos = (List<Photo>) in.readValue(List.class.getClassLoader());
+        highlightPhoto = in.readParcelable(HighlightPhoto.class.getClassLoader());
     }
 
     @Override
@@ -60,7 +64,7 @@ public class Holiday implements Parcelable {
         dest.writeString(location);
         dest.writeValue(startDate);
         dest.writeValue(endDate);
-//        dest.writeValue(photos);
+        dest.writeParcelable(highlightPhoto, flags);
     }
 
     @Override
@@ -120,11 +124,11 @@ public class Holiday implements Parcelable {
         this.endDate = endDate;
     }
 
-//    public List<Photo> getPhotos() {
-//        return photos;
-//    }
-//
-//    public void setPhotos(List<Photo> photos) {
-//        this.photos = photos;
-//    }
+    public HighlightPhoto getHighlightPhoto() {
+        return highlightPhoto;
+    }
+
+    public void setHighlightPhoto(HighlightPhoto highlightPhoto) {
+        this.highlightPhoto = highlightPhoto;
+    }
 }

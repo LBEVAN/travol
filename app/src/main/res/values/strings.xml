@@ -127,4 +127,5 @@
     <string name="title_activity_create_place">Create a Place</string>
     <string name="error_date">Enter the Date</string>
     <string name="hint_date">Date</string>
+    <string name="btn_select_highlight_photo">Select Highlight Photo</string>
 </resources>

@@ -21,6 +21,7 @@ import lbevan.github.io.travol.R;
 import lbevan.github.io.travol.activity.main.MainActivity;
 import lbevan.github.io.travol.component.notes.NotesFragment;
 import lbevan.github.io.travol.component.photoGallery.PhotoGalleryFragment;
+import lbevan.github.io.travol.domain.entity.HighlightPhoto;
 import lbevan.github.io.travol.domain.entity.Holiday;
 import lbevan.github.io.travol.domain.entity.Note;
 import lbevan.github.io.travol.domain.entity.Photo;
@@ -32,6 +33,8 @@ public class HolidayActivity extends AppCompatActivity implements
         PhotoGalleryFragment.PhotoGalleryInteractionListener,
         HolidayDetailsFragment.OnFragmentInteractionListener,
         NotesFragment.OnFragmentInteractionListener{
+
+    private static final int REQUEST_EDIT_HOLIDAY = 1;
 
     private Holiday holiday;
 
@@ -55,19 +58,7 @@ public class HolidayActivity extends AppCompatActivity implements
 
         collapsingImageView = findViewById(R.id.img_collapsing);
 
-        List<Photo> photos = Database.getDatabase(getApplicationContext()).photoDao().getPhotosByHolidayId(holiday.getId());
-
-        if(photos == null || photos.size() == 0) {
-            collapsingImageView.setImageDrawable(getResources().getDrawable(R.drawable.default_holiday_image));
-        } else {
-            final File file = FileSystemUtils.getPhotoFileByFileName(getApplicationContext(), photos.get(0).getFileName());
-            collapsingImageView.post(new Runnable() {
-                @Override
-                public void run() {
-                    new DecodeBitmapAsyncTask(file, collapsingImageView).execute();
-                }
-            });
-        }
+        setCollapsingImage();
 
         setTitle(holiday.getTitle());
 
@@ -88,10 +79,22 @@ public class HolidayActivity extends AppCompatActivity implements
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), EditHolidayActivity.class);
 
-                intent.putExtra("holiday", new Holiday(holiday));
-                view.getContext().startActivity(intent);
+                intent.putExtra("holiday", holiday);
+                startActivityForResult(intent, REQUEST_EDIT_HOLIDAY);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK) {
+            if(requestCode == REQUEST_EDIT_HOLIDAY) {
+                holiday = data.getParcelableExtra("Holiday");
+                Database.getDatabase(this).holidayDao().updateHoliday(holiday);
+                viewPager.getAdapter().notifyDataSetChanged();
+                setCollapsingImage();
+            }
+        }
     }
 
     @Override
@@ -137,11 +140,12 @@ public class HolidayActivity extends AppCompatActivity implements
      * {@inheritDoc}
      */
     @Override
-    public void onAddPhotoToGallery(File imageFile) {
+    public void onAddPhotoToGallery(String imagePath) {
         // create the photo and save it to the selected holiday
-        Photo photo = new Photo(holiday.getId(), imageFile.getName());
+        Photo photo = new Photo(holiday.getId(), imagePath);
         Database.getDatabase(getApplicationContext()).photoDao().createPhoto(photo);
 
+        // todo: notifiysatetchanged?
         // reload the photos and update the gallery
         List<Photo> photos = Database.getDatabase(getApplicationContext()).photoDao().getPhotosByHolidayId(holiday.getId());
         PhotoGalleryFragment photoGalleryFragment = (PhotoGalleryFragment) getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.container + ":" + viewPager.getCurrentItem());
@@ -169,5 +173,20 @@ public class HolidayActivity extends AppCompatActivity implements
     @Override
     public void onEditNoteResult(Note note) {
         Database.getDatabase(this).noteDao().saveNote(note);
+    }
+
+    private void setCollapsingImage() {
+        final HighlightPhoto highlightPhoto = holiday.getHighlightPhoto();
+        if(highlightPhoto == null || highlightPhoto.getPath().equals("")) {
+            // set a default image
+            collapsingImageView.setImageResource(R.drawable.default_holiday_image);
+        } else {
+            collapsingImageView.post(new Runnable() {
+                @Override
+                public void run() {
+                    new DecodeBitmapAsyncTask(highlightPhoto.getPath(), collapsingImageView).execute();
+                }
+            });
+        }
     }
 }

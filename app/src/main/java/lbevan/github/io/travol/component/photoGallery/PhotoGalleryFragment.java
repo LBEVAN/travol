@@ -31,6 +31,7 @@ import java.util.List;
 
 import lbevan.github.io.travol.R;
 import lbevan.github.io.travol.domain.entity.Photo;
+import lbevan.github.io.travol.util.PhotoUtils;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -155,18 +156,17 @@ public class PhotoGalleryFragment extends Fragment {
                     int currentItem = 0;
                     while(currentItem < count) {
                         Uri imageUri = data.getClipData().getItemAt(currentItem).getUri();
-                        File imageFile = copyPhotoFromUri(imageUri);
-                        photoGalleryInteractionListener.onAddPhotoToGallery(imageFile);
+                        String imagePath = PhotoUtils.copyPhotoFromUri(getContext(), imageUri);
+                        photoGalleryInteractionListener.onAddPhotoToGallery(imagePath);
                         currentItem = currentItem + 1;
                     }
                 } else if(data.getData() != null) {
                     Uri imageUri = data.getData();
-                    File imageFile = copyPhotoFromUri(imageUri);
-                    photoGalleryInteractionListener.onAddPhotoToGallery(imageFile);
+                    String imagePath = PhotoUtils.copyPhotoFromUri(getContext(), imageUri);
+                    photoGalleryInteractionListener.onAddPhotoToGallery(imagePath);
                 }
             } else if(requestCode == REQUEST_TAKE_PHOTO) {
-                File imageFile = new File(currentPhotoPath);
-                photoGalleryInteractionListener.onAddPhotoToGallery(imageFile);
+                photoGalleryInteractionListener.onAddPhotoToGallery(currentPhotoPath);
             }
         }
 
@@ -177,40 +177,6 @@ public class PhotoGalleryFragment extends Fragment {
                 file.delete();
             }
         }
-    }
-
-    private File copyPhotoFromUri(Uri uri) {
-        InputStream inputStream = null;
-        OutputStream outputStream = null;
-        File imageFile = null;
-        try {
-            inputStream = getContext().getContentResolver().openInputStream(uri);
-            imageFile = createImageFile();
-            outputStream = new FileOutputStream(imageFile);
-            byte[] buf = new byte[1024];
-            int len;
-            while((len = inputStream.read(buf)) > 0){
-                outputStream.write(buf, 0, len);
-            }
-        } catch (FileNotFoundException ex) {
-            // Error occurred while creating the File
-            System.out.println(ex);
-        } catch (IOException ex) {
-            // Error occurred while creating the File
-            System.out.println(ex);
-        } finally {
-            try {
-                if(outputStream != null) {
-                    outputStream.close();
-                }
-                inputStream.close();
-            } catch (IOException ex) {
-                // Error occurred while creating the File
-                System.out.println(ex);
-            }
-        }
-
-        return imageFile;
     }
 
     private void dispatchChoosePhotoIntent() {
@@ -230,7 +196,8 @@ public class PhotoGalleryFragment extends Fragment {
             // Create the File where the photo should go
             File photoFile = null;
             try {
-                photoFile = createImageFile();
+                photoFile = PhotoUtils.createImageFile(getContext());
+                currentPhotoPath = photoFile.getAbsolutePath();
             } catch (IOException ex) {
                 // Error occurred while creating the File
                 System.out.println(ex);
@@ -242,36 +209,9 @@ public class PhotoGalleryFragment extends Fragment {
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-//                galleryAddPic();
             }
         }
     }
-
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,
-                ".jpg",
-                storageDir
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        currentPhotoPath = image.getAbsolutePath();
-        return image;
-    }
-
-    // TODO: this will add the picture to the gallery (only if made public)
-    // TODO: see if we want to do this later on, currently just saving to app dir
-//    private void galleryAddPic() {
-//        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-//        File f = new File(currentPhotoPath);
-//        Uri contentUri = Uri.fromFile(f);
-//        mediaScanIntent.setData(contentUri);
-//        getActivity().sendBroadcast(mediaScanIntent);
-//    }
 
     public void updateGallery(List<Photo> photos) {
         this.photos = photos;
@@ -287,8 +227,8 @@ public class PhotoGalleryFragment extends Fragment {
         /**
          * Callback method for when adding a photo to the gallery.
          *
-         * @param photoFile the file of the photo added on the filesystem
+         * @param imagePath the path to the photo on the device
          */
-        void onAddPhotoToGallery(File photoFile);
+        void onAddPhotoToGallery(String imagePath);
     }
 }

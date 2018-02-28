@@ -37,12 +37,12 @@ class PhotoGalleryAdapter extends RecyclerView.Adapter<PhotoGalleryViewHolder> {
 
     @Override
     public void onBindViewHolder(final PhotoGalleryViewHolder holder, int position) {
-        final File file = FileSystemUtils.getPhotoFileByFileName(context, photos.get(position).getFileName());
+        final String imagePath = photos.get(position).getImagePath();
 
         holder.imageView.post(new Runnable() {
             @Override
             public void run() {
-                new DecodeBitmapAsyncTask(file, holder.imageView).execute();
+                new DecodeBitmapAsyncTask(imagePath, holder.imageView).execute();
             }
         });
     }

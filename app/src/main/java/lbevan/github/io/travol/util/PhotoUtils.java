@@ -1,9 +1,19 @@
 package lbevan.github.io.travol.util;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Environment;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by LBEVAN on 20/02/2018.
@@ -17,24 +27,23 @@ public class PhotoUtils {
      *
      * See: https://developer.android.com/topic/performance/graphics/load-bitmap.html
      *
-     * @param file the {@link File} to load the image from
+     * @param imagePath the absolute path of the photo on the device
      * @param targetWidth width of the target image holder (i.e. {@link android.widget.ImageView})
      * @param targetHeight height of the target image holder (i.e. {@link android.widget.ImageView})
      * @return the decoded and scaled {@link Bitmap}
      */
-    public static Bitmap
-    decodeSampledBitmapFromFile(File file, int targetWidth, int targetHeight) {
+    public static Bitmap decodeSampledBitmapFromPath(String imagePath, int targetWidth, int targetHeight) {
         // first decode with inJustDecodeBounds = true to check dimensions
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+        BitmapFactory.decodeFile(imagePath, options);
 
         // calculate inSampleSize
         options.inSampleSize = calculateInSampleSize(options, targetWidth, targetHeight);
 
         // decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+        return BitmapFactory.decodeFile(imagePath, options);
     }
 
     /**
@@ -66,5 +75,53 @@ public class PhotoUtils {
         }
 
         return inSampleSize;
+    }
+
+    public static String copyPhotoFromUri(Context context, Uri uri) {
+        InputStream inputStream = null;
+        OutputStream outputStream = null;
+        File imageFile = null;
+        try {
+            inputStream = context.getContentResolver().openInputStream(uri);
+            imageFile = createImageFile(context);
+            outputStream = new FileOutputStream(imageFile);
+            byte[] buf = new byte[1024];
+            int len;
+            while((len = inputStream.read(buf)) > 0){
+                outputStream.write(buf, 0, len);
+            }
+        } catch (FileNotFoundException ex) {
+            // Error occurred while creating the File
+            System.out.println(ex);
+        } catch (IOException ex) {
+            // Error occurred while creating the File
+            System.out.println(ex);
+        } finally {
+            try {
+                if(outputStream != null) {
+                    outputStream.close();
+                }
+                inputStream.close();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                System.out.println(ex);
+            }
+        }
+
+        return imageFile.getAbsolutePath();
+    }
+
+    public static File createImageFile(Context context) throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,
+                ".jpg",
+                storageDir
+        );
+
+        return image;
     }
 }

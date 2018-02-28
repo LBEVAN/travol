@@ -21,11 +21,13 @@ import lbevan.github.io.travol.R;
 import lbevan.github.io.travol.activity.holiday.EditHolidayActivity;
 import lbevan.github.io.travol.activity.place.EditPlaceActivity;
 import lbevan.github.io.travol.component.place.PlacesFragment;
+import lbevan.github.io.travol.domain.entity.Holiday;
 import lbevan.github.io.travol.domain.entity.Place;
 import lbevan.github.io.travol.domain.persistence.Database;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int REQUEST_CREATE_HOLIDAY = 1;
     private static final int REQUEST_CREATE_PLACE = 2;
 
     /**
@@ -71,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if(position == 1) {
                     Intent intent = new Intent(view.getContext(), EditHolidayActivity.class);
-                    view.getContext().startActivity(intent);
+                    startActivityForResult(intent, REQUEST_CREATE_HOLIDAY);
                 } else if(position == 2) {
                     Intent intent = new Intent(view.getContext(), EditPlaceActivity.class);
                     startActivityForResult(intent, REQUEST_CREATE_PLACE);
@@ -86,7 +88,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_OK) {
-            if(requestCode == REQUEST_CREATE_PLACE) {
+            if(requestCode == REQUEST_CREATE_HOLIDAY) {
+                Holiday holiday = data.getParcelableExtra("Holiday");
+                Database.getDatabase(this).holidayDao().createHoliday(holiday);
+                mViewPager.getAdapter().notifyDataSetChanged();
+            } else if(requestCode == REQUEST_CREATE_PLACE) {
                 Place place = data.getParcelableExtra("Place");
                 Database.getDatabase(this).placeDao().savePlace(place);
                 mViewPager.getAdapter().notifyDataSetChanged();

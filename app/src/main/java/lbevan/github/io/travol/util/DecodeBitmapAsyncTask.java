@@ -14,11 +14,11 @@ import java.io.File;
  */
 public class DecodeBitmapAsyncTask extends AsyncTask<Object, Void, Bitmap> {
 
-    private File file;
+    private String imagePath;
     private ImageView imageView;
 
-    public DecodeBitmapAsyncTask(File file, ImageView imageView) {
-        this.file = file;
+    public DecodeBitmapAsyncTask(String imagePath, ImageView imageView) {
+        this.imagePath = imagePath;
         this.imageView = imageView;
     }
 
@@ -33,7 +33,7 @@ public class DecodeBitmapAsyncTask extends AsyncTask<Object, Void, Bitmap> {
         int width = imageView.getWidth();
         int height = imageView.getHeight();
 
-        return PhotoUtils.decodeSampledBitmapFromFile(file, width, height);
+        return PhotoUtils.decodeSampledBitmapFromPath(imagePath, width, height);
     }
 
     /**
@@ -48,6 +48,6 @@ public class DecodeBitmapAsyncTask extends AsyncTask<Object, Void, Bitmap> {
 
         // clear down references
         this.imageView = null;
-        this.file = null;
+        this.imagePath = null;
     }
 }

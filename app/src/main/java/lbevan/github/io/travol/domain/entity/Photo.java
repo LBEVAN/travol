@@ -26,28 +26,24 @@ public class Photo implements Parcelable {
     private int id;
 
     private int holidayId;
-    private String fileName;
+    private String imagePath;
 
-    /* This is the corresponding file on the device, should be injected when needed */
-    @Ignore
-    private File file;
-
-    public Photo(int holidayId, String fileName) {
+    public Photo(int holidayId, String imagePath) {
         this.holidayId = holidayId;
-        this.fileName = fileName;
+        this.imagePath = imagePath;
     }
 
     protected Photo(Parcel in) {
         id = in.readInt();
         holidayId = in.readInt();
-        fileName = in.readString();
+        imagePath = in.readString();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
         dest.writeInt(holidayId);
-        dest.writeString(fileName);
+        dest.writeString(imagePath);
     }
 
     @Override
@@ -83,19 +79,11 @@ public class Photo implements Parcelable {
         this.holidayId = holidayId;
     }
 
-    public String getFileName() {
-        return fileName;
+    public String getImagePath() {
+        return imagePath;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-    public File getFile() {
-        return file;
-    }
-
-    public void setFile(File file) {
-        this.file = file;
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }

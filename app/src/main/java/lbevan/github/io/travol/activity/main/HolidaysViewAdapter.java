@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.List;
 
 import lbevan.github.io.travol.R;
+import lbevan.github.io.travol.domain.entity.HighlightPhoto;
 import lbevan.github.io.travol.domain.entity.Holiday;
 import lbevan.github.io.travol.domain.entity.Photo;
 import lbevan.github.io.travol.domain.persistence.Database;
@@ -43,21 +44,15 @@ class HolidaysViewAdapter extends RecyclerView.Adapter<HolidaysViewHolder> {
         holder.holidayTitle.setText(holiday.getTitle());
         holder.holidayLocation.setText(holiday.getLocation());
 
-        // todo: choose a photo from the list
-        List<Photo> photos = Database.getDatabase(context).photoDao().getPhotosByHolidayId(holiday.getId());
-
-        if(photos == null || photos.size() == 0) {
+        final HighlightPhoto highlightPhoto = holiday.getHighlightPhoto();
+        if(highlightPhoto == null || highlightPhoto.getPath().equals("")) {
             // set a default image
             holder.holidayHighlightedPhoto.setImageResource(R.drawable.default_holiday_image);
         } else {
-            // todo: give ability to choose a photo to render!
-            Photo photo = photos.get(0);
-            final File file = FileSystemUtils.getPhotoFileByFileName(context, photo.getFileName());
-
             holder.holidayHighlightedPhoto.post(new Runnable() {
                 @Override
                 public void run() {
-                    new DecodeBitmapAsyncTask(file, holder.holidayHighlightedPhoto).execute();
+                    new DecodeBitmapAsyncTask(highlightPhoto.getPath(), holder.holidayHighlightedPhoto).execute();
                 }
             });
         }

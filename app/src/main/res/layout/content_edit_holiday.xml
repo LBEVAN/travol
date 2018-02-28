@@ -147,6 +147,20 @@
 
         </RelativeLayout>
 
+        <ImageView
+            android:id="@+id/img_holiday_highlight_photo"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:scaleType="centerCrop"
+            android:layout_below="@+id/layout_end_date"/>
+
+        <Button
+            android:id="@+id/btn_select_highlight_photo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/img_holiday_highlight_photo"
+            android:text="@string/btn_select_highlight_photo"/>
+
     </RelativeLayout>
 
 </ScrollView>
